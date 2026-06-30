@@ -1,0 +1,27 @@
+# Render.com blueprint for the Gym MS backend.
+# Deploy: connect repo, set the secret env vars in the dashboard, deploy.
+services:
+  - type: web
+    name: gym-ms-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm ci && npm run build
+    startCommand: npm run migrate && npm run seed && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_SSL
+        value: "true"
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: REDIS_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
